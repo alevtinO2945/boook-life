@@ -1,0 +1,71 @@
+{% include 'base.html'%}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container">
+<form  class="m-3" action="{% url 'search_results' %}" method="get">
+            <input class="form-control" name="q" type="text" placeholder="Search...">
+        </form>
+
+<br>
+<div class="card mb-3" style="max-width: 840px;">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img  src="{{ book.image.url }}" class="card-img">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h4 class="card-title">{{ book.name }}</h4>
+          <p class="card-text">Author: {{ book.author }}</p><hr>
+          <p class="card-text">{{ book.descr }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<p>Price: $ {{ book.price|floatformat:2 }}</p>
+
+
+
+{% if book.book_available is True %}
+<a  href="{% url 'checkout' book.pk %}" class=" mb-4 btn btn-outline-success" role="button">Buy Now</a>
+{% else %}
+
+<h4 class="mb-4 text-danger">Out of Stock !</h4>
+{% endif %}
+<div class="comments">
+
+    {% if user.is_authenticated %}
+    <h4>Leave a comment</h4>
+  <div class="form text-center">
+    <form class="form d-flex flex-column justify-content-start align-items-start"  action="{% url 'detail' book.pk %}" method="POST" style="margin-top: 1.3em;">
+        {% csrf_token %}
+        {{ comment_form.text| as_crispy_field }}
+
+
+
+          <button type="submit" class="m-3 btn form-group btn-warning  btn-lg">Submit</button>
+        </form>
+  </div>
+    {% endif%}
+
+
+  <h4>Comments</h4>
+{%for com in comments%}
+
+
+<div class="p-3 m-3 card comment">
+  <div class="bold">{{com.author}} {{comment.created_date}}</div>
+  <div>{{com.text}}</div>
+
+
+
+</div>
+
+
+{%endfor%}
+  </div>
+  </div>
+
+{% endblock content %}

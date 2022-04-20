@@ -1,0 +1,25 @@
+{% include 'base.html'%}
+
+
+
+
+{% block content %}
+
+<div class="container">
+    <form  class="m-3" action="{% url 'search_results' %}" method="get">
+            <input class="form-control" name="q" type="text" placeholder="Search...">
+        </form>
+    <h3 class = "text-secondary">Search Results</h3><hr>
+
+    {% for every in object_list %}
+        <div>
+            <h3><a href="{% url 'detail' every.pk %}">{{ every.name }}</a></h3>
+            <p>Author: {{ every.author }}</p>
+        </div>
+    {% empty %}
+    <h5 class="text-danger">Nothing found :(</h5>
+    {% endfor %}
+</div>
+
+
+{% endblock content %}
